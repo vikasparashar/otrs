@@ -7,7 +7,7 @@ $rm=`rm -rf mesg.txt`;
 $db    ="otrs";
 $user  = "root";
 $pass  = "piyush";
-$hosti ="localhost";
+$host ="localhost";
 $query = "select login,first_name,last_name from users where id!=1";
 $dbh = DBI->connect("DBI:mysql:$db:$host", $user, $pass);
 
@@ -52,7 +52,7 @@ while ( @row2=$sth2->fetchrow_array() )
       my $file = "mesg.txt";
       my $text="$row2[0]-$row2[1]";
       open (MYFILE, ">>$file");
-      print MYFILE "$text\n<br>";
+      print MYFILE "<div>$text\n</div><br>";
       close (MYFILE);
 }
   
@@ -72,6 +72,8 @@ while ( @row3=$sth3->fetchrow_array() )
 {
 if ( $row3[0] == '01' )
 {
+#while( @row=$sth->fetchrow_array() )
+#{
 my $cust_name="Sheelafoam";
 $to = "piyush.mishra\@fosteringlinux.com";
 $subject = 'Pending task reminder';
@@ -81,12 +83,11 @@ Please find your pending/close task, kindly close asap.
 <table border='1px'>
 <tr><th><h3>Customer Name</h3></th>
 <th border='1px'><h3>Onsite/Offsite</h3></th>
-<th border='1px'><h3>Ticket Id</h3></th>
 <th border='1px'><h3>Task($date)</h3></th>
 <th border='1px'><h3>Status</h3></th>
 </tr>
-<tr><td>$cust_name</td><td>onsite</td><td>$row3[2]</td><td>$body<br>
-</td><td>$row3[3]</td></tr>
+<tr><td>$cust_name</td><td>onsite</td><td>$body<br>
+</td><td>pending</td></tr>
 </table>
 <br><br><br><br>
 <h3>Please Update it at end of day(Use Same Format above)</h3><br>
@@ -105,9 +106,9 @@ $msg = MIME::Lite->new(
 $msg->attr("content-type" => "text/html");         
 $msg->send;
 #print $message;
-
+#}
 #print "Email Sent Successfully\n";
 #print "$row[0]\n";
-
+#}
 #
 #$rm=`rm -rf mesg.txti`;
