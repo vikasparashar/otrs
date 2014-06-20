@@ -70,6 +70,9 @@ or die "can't execute the query: $sth3->errstr";
 
 while ( @row3=$sth3->fetchrow_array() )
 {
+if ( $row3[0] == '01' )
+{
+my $cust_name="Sheelafoam";
 $to = "piyush.mishra\@fosteringlinux.com";
 $subject = 'Pending task reminder';
 $message="Dear $row[1] $row[2],<br>
@@ -82,13 +85,14 @@ Please find your pending/close task, kindly close asap.
 <th border='1px'><h3>Task($date)</h3></th>
 <th border='1px'><h3>Status</h3></th>
 </tr>
-<tr><td>$row3[0]</td><td>onsite</td><td>$row3[2]</td><td>$body<br>
+<tr><td>$cust_name</td><td>onsite</td><td>$row3[2]</td><td>$body<br>
 </td><td>$row3[3]</td></tr>
 </table>
 <br><br><br><br>
 <h3>Please Update it at end of day(Use Same Format above)</h3><br>
 <h4>Thanks</h4><br>
 <h4>Keenable IT Support System</h4>";
+}
 }
 $msg = MIME::Lite->new(
                  From     => "keenableotrs\@gmail.com",
