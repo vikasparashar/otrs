@@ -1,0 +1,4 @@
+PRODUCT = OTRS
+VERSION = 3.3.3
+BUILDDATE = Wed Dec  4 23:18:45 CET 2013
+BUILDHOST = otrsbuild.otrs.com
