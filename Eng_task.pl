@@ -82,7 +82,7 @@ Please find your pending/close task, kindly close asap.
 <th border='1px'><h3>Task($date)</h3></th>
 <th border='1px'><h3>Status</h3></th>
 </tr>
-<tr><td>$row3[1]</td><td>onsite</td><td>$row3[0]</td><td>$body<br>
+<tr><td>$row3[0]</td><td>onsite</td><td>$row3[2]</td><td>$body<br>
 </td><td>$row3[3]</td></tr>
 </table>
 <br><br><br><br>
