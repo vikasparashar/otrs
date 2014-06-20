@@ -52,7 +52,7 @@ while ( @row2=$sth2->fetchrow_array() )
       my $file = "mesg.txt";
       my $text="$row2[0]-$row2[1]";
       open (MYFILE, ">>$file");
-      print MYFILE "$text\n";
+      print MYFILE "$text\n<br>";
       close (MYFILE);
 }
   
