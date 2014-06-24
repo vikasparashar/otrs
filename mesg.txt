@@ -1,36 +1,31 @@
-<div>2014062044000012-Dear Sir
+<tr><td>Sheela Foam</td><td>onsite</td><td>Dear Sir
 
 This is my testing1 mail
 
 Thanks
 Piyush
-
-</div><br><div>2014062044000021-Dear Sir
+</td><td>Pending</tr><tr><td>Sheela Foam</td><td>onsite</td><td>Dear Sir
 
 this is my testing2 mail
 
 Thanks
 Piyush
-
-</div><br><div>2014062044000031-Dear Sir
+</td><td>Pending</tr><tr><td>Sheela Foam</td><td>onsite</td><td>Dear Sir
 
 this is my testing3 mail
 
 Thanks
 Piyush
-
-</div><br><div>2014062044000049-Dear Sir
+</td><td>Pending</tr><tr><td>Sheela Foam</td><td>onsite</td><td>Dear Sir
 
 this is my testing4 mail
 
 Thanks
 Piyush
-
-</div><br><div>2014062044000058-Dear Sir
+</td><td>Pending</tr><tr><td>Sheela Foam</td><td>onsite</td><td>Dear Sir
 
 this is my testing5 mail
 
 Thanks
 Piyush
-
-</div><br>
+</td><td>Pending</tr>

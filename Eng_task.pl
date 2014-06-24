@@ -46,16 +46,16 @@ while ( @row2=$sth2->fetchrow_array() )
   
 $body=`cat mesg.txt`;
 
-#while ( @row=$sth->fetchrow_array() )
-#{
+while ( @row=$sth->fetchrow_array() )
+{
 
-$to = 'piyush.mishra\@fosteringlinux.com';
+$to = $row[0];
 $subject = 'Pending task reminder';
 $message="Dear $row[1] $row[2],<br>
 Please find your pending/close task, kindly close asap.
 <h4>Note:</h4> Please give the status as pending/closed,otherwise task status will be marked as 'Pending'.<br>
 <table border='1px'>
-<tr><th><h3>Customer Name</h3></th>
+<tr bgcolor='#FF0000'><th><h3>Customer Name</h3></th>
 <th border='1px'><h3>Onsite/Offsite</h3></th>
 <th border='1px'><h3>Ticket No-Task($date)</h3></th>
 <th border='1px'><h3>Status</h3></th>
@@ -78,5 +78,6 @@ $msg = MIME::Lite->new(
                  
 $msg->attr("content-type" => "text/html");         
 $msg->send;
-#}
+print "$row[0]";
 print "Email Sent Successfully\n";
+}
