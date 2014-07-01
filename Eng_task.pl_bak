@@ -25,22 +25,12 @@ or die "Can't prepare $query1: $dbh->errstr\n";
 $rv1 = $sth1->execute 
 
 or die "can't execute the query: $sth1->errstr";
+
 @body;
-
-#while( @row1=$sth1->fetchrow_array() )
-#{
-
- #     my $file = "mesg.txt";
-  #    my $text=$row1[0];
-   #  open (MYFILE, ">>$file");
-    #  print MYFILE "$text\n<br>";
-     # close (MYFILE);
-
-#}
-#while( @row=$sth->fetchrow_array() )
-#{
-
-$query2 = "select ticket_id,task from Task_list";
+@Client_task_tables=( Task_list,Indebo_task);
+foreach $tsk (@Client_task_tables)
+     {
+$query2 = "select tsk.task_id,tsk.ticket_id,tsk.task,cust.name from $tsk tsk ,customer_company cust where tsk.customer_name=cust.customer_id";
 $sth2 = $dbh->prepare($query2)
 or die "Can't prepare $query2: $dbh->errstr\n";
 
@@ -49,55 +39,43 @@ or die "can't execute the query: $sth2->errstr";
 
 while ( @row2=$sth2->fetchrow_array() )
 {
+     
+
       my $file = "mesg.txt";
-      my $text="<div>$row2[0]-$row2[1]</div>";
+      
       open (MYFILE, ">>$file");
-      print MYFILE "<div>$text\n</div><br>";
+      print MYFILE "<tr><td>$row2[0]</td><td>$row2[3]</td><td>onsite</td><td >$row2[2]</td><td>Pending</td></tr>";
       close (MYFILE);
 }
-  
-
-
+    }
 $body=`cat mesg.txt`;
-#print "$body";
 
-$query3 = "select customer_name,status from Task_list";
-$sth3 = $dbh->prepare($query3)
-or die "Can't prepare $query3: $dbh->errstr\n";
-
-$rv3 = $sth3->execute
-or die "can't execute the query: $sth3->errstr";
-
-while ( @row3=$sth3->fetchrow_array() )
+while ( @row=$sth->fetchrow_array() )
 {
-if ( $row3[0] == '01' )
-{
-#while( @row=$sth->fetchrow_array() )
-#{
-my $cust_name="Sheelafoam";
-$to = "piyush.mishra\@fosteringlinux.com";
+
+#$to = $row[0];
 $subject = 'Pending task reminder';
 $message="Dear $row[1] $row[2],<br>
 Please find your pending/close task, kindly close asap.
 <h4>Note:</h4> Please give the status as pending/closed,otherwise task status will be marked as 'Pending'.<br>
 <table border='1px'>
-<tr><th><h3>Customer Name</h3></th>
-<th border='1px'><h3>Onsite/Offsite</h3></th>
-<th border='1px'><h3>Task($date)</h3></th>
+<tr bgcolor='#FF0000'><th><h3>Id</h3></th>
+<th border='1px'><h3>Customer</h3></th>
+<th border='1px'><h3>Onsite</h3></th>
+<th border='1px'><h3>Ticket</h3></th>
 <th border='1px'><h3>Status</h3></th>
 </tr>
-<tr><td>$cust_name</td><td>onsite</td><td>$body<br>
-</td><td>pending</td></tr>
+$body
 </table>
 <br><br><br><br>
 <h3>Please Update it at end of day(Use Same Format above)</h3><br>
 <h4>Thanks</h4><br>
 <h4>Keenable IT Support System</h4>";
-}
-}
+
+
 $msg = MIME::Lite->new(
                  From     => "keenableotrs\@gmail.com",
-                 To       => $to,
+                 To       => $row[0],
                  Cc       => $cc,
                  Subject  => $subject,
                  Data     => $message
@@ -105,10 +83,6 @@ $msg = MIME::Lite->new(
                  
 $msg->attr("content-type" => "text/html");         
 $msg->send;
-#print $message;
-#}
+#print "$row[0]";
 #print "Email Sent Successfully\n";
-#print "$row[0]\n";
-#}
-#
-#$rm=`rm -rf mesg.txti`;
+}

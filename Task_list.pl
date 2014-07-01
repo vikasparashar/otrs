@@ -18,17 +18,32 @@ $rv = $sth->execute
 or die "can't execute the query: $sth->errstr";
 while( @row=$sth->fetchrow_array() )
 {
+     if ( $row[1] == '01')
+{
+   
 
-print "$row[0]\n";
-print "$row[1]\n";
-print "$row[2]\n";
+#print "$row[0]\n";
+#print "$row[1]\n";
+#print "$row[2]\n";
 
-$query1 = "INSERT INTO Task_list (ticket_id,customer_name,task,status  ) VALUES ( '$row[0]','$row[1]','$row[2]','Pending' )";
-$sth1 = $dbh->prepare($query1)
-or die "Can't prepare $query1: $dbh->errstr\n";
+#$query1 = "INSERT INTO Task_list (ticket_id,customer_name,task,status  ) VALUES ( '$row[0]','$row[1]','$row[2]','Pending' )";
+#$sth1 = $dbh->prepare($query1)
+#or die "Can't prepare $query1: $dbh->errstr\n";
 
-$rv1 = $sth1->execute
-or die "can't execute the query: $sth1->errstr";
+#$rv1 = $sth1->execute
+#or die "can't execute the query: $sth1->errstr";
+}
+elsif ( $row[1] == '02' )
+{
+
+$q2 = "INSERT INTO Indebo_task (ticket_id,customer_name,task,status  ) VALUES ( '$row[0]','$row[1]','$row[2]','Pending' )";
+$sth2 = $dbh->prepare($q2)
+or die "Can't prepare $q2: $dbh->errstr\n";
+
+$rv2 = $sth2->execute
+or die "can't execute the query: $sth2->errstr";
+
+}
 
 }
 
