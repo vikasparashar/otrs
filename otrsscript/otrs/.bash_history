@@ -1,0 +1,4 @@
+fetchmail 
+exit
+\q
+exit

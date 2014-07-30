@@ -1,0 +1,11 @@
+use DBI;
+use DBD::mysql;
+$db = 'otrs';
+$host = 'localhost';
+$user = 'root';
+$pwd='piyush';
+$sts="pending";
+$dbh=DBI->connect("DBI:mysql:$db:$host",$user,$pwd);
+$query="update Task_list set status='close' where Status='$sts' ";
+$sth=$dbh->prepare($query);
+$rv=$sth->execute;
