@@ -1,0 +1,36 @@
+On 29 July 2014 09:15, <attendance@fosteringlinux.com> wrote:
+
+> Dear Aakash Jonwal,
+> Please find your pending/close task, kindly close asap.
+> *Instructions*
+> 1.If you find blank sheet ie you have no any pending task. In this case
+> you have to update this blank sheet of current new task(pending/close).
+> 2. If you are work at keenAble office(not in client site),then update
+> sheet according your current date tasks.
+> 3.In case of office work,then fill sheet( in customer-name field
+> KEENABLE,task->your task,Date->date of task).
+> 4. Please Update it at end of day(Use Same Format above)
+> If you Have any new task of client,Please fill all blank field For
+> ex.(Date-->16-07-2014,Customer-->CDOT,Ticket-->sort of
+> task,status-->close/pending/approval for pending,Engineer-name-->Piyush
+> Mishra.(Except id column)).
+> Note: *Please give the status as pending/closed,otherwise task status
+> will be marked as 'Pending'.*
+>  Id Customer Date Onsite Ticket Status EngineerName PEOPLESGROUP30-07-2014
+> OnsiteCloseHealth Checkup of all the ServersAakash Jonwal PEOPLESGROUP
+> 30-07-2014OnsiteCloseRemove the span mails from hordeAakash Jonwal
+> PEOPLESGROUP30-07-2014OnsiteCloseResolve the Internet issue for UserAakash
+> Jonwal PEOPLESGROUP30-07-2014OnsiteCloseTake weekly Audit Backup of
+> Peoples Group and Hotel Raja BhojAakash Jonwal PEOPLESGROUP30-07-2014
+> OnsiteCloseDoing Visit For Internet Check up In Campus in Morning and
+> Evening.Aakash Jonwal
+>
+>  * Have a nice day * Thanks
+> Keenable IT Support System
+
+
+
+
+-- 
+*Thanks & Regards:*
+*Aakash Jonwal  |  +919873044992*
