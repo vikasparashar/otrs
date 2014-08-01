@@ -11,17 +11,10 @@ use Mail::IMAPClient::BodyStructure;
 use HTML::TableExtract;
 use HTML::TableContentParser;
 use MIME::Lite;
-use Email::Address;
-use Log::Log4perl;
 ################################################    START SCRIPT #################################
 
-my $curr_dte=`date|/usr/bin/awk \'{ print (\$3) }\'`;
-my $curr_month=`date|/usr/bin/awk \'{ print (\$2) }\'`;
-$curr_dte=~s/^\s+|\s+$//g;
-$curr_month=~s/^\s+|\s+$//g;
-
-#print "$curr_dte\n";
-#print "$curr_month\n";
+my $dte=`date|cut -d" " -f3`;
+my $month=`date|cut -d" " -f2`;
 my $from1;
 ##########  Db connection################
 $db = "otrs";
@@ -63,21 +56,24 @@ foreach my $msgseqnos ($msg) {
         my $from = $header->get_all("From");
         my $msg_id = $header->get("message-id");
         my $to = $header->get_all("To");
-        my $Date = $header->get("date");
+        my $date = $header->get("date");
         my $subject = $header->get("subject");
 	  $body = $entity->body;
 #        my $content = get_msg_content($entity);
         $entity->purge();
         #print "Content: $content";
 
-$m_date = sprintf ("$Date","this is stored in \$m_date");
-$mail_date=`echo "$m_date"|/usr/bin/awk \'{ print (\$2) }\'`;
-$mail_month=`echo "$m_date"|/usr/bin/awk \'{ print (\$3) }\'`;
-$mail_date=~s/^\s+|\s+$//g;
-$mail_month=~s/^\s+|\s+$//g;
+#print "$date";
+#my $tablefound=print"@$body";
+#print "$tablefound";
+
 #print "@$body";
+
+
 my $from1=`echo "$from"|cut -d" " -f3|cut -d"<" -f2| cut -d">" -f1`;
-print "$from";
+
+#print "$from";
+
 my $x;
 $x = sprintf ("@$body","this is stored in \$x");
 
@@ -85,19 +81,82 @@ $x = sprintf ("@$body","this is stored in \$x");
 $html_string = join("\n",@$body);
 
 ################# Mark attendance #########################
- my ($addr) = Email::Address->parse($from);
- my    $From=$addr->address;
 
-Mark_Attendance($From,$curr_dte,$curr_month,$x,$mail_date,$mail_month);
 
-###########################################################
+if ($x =~ /<table border=3D"1px" width=3D"90%">/)
+{
+
+
+      $msg = MIME::Lite->new(
+                 'Reply-to' => "piyush.mishra\@fosteringlinux.com",
+                  From     => "attendance\@fosteringlinux.com",
+                  To       => $from,
+                  Subject  => "Auto-reply(attendance-marked)",
+                  Data     => "Thank you for sending your daily report with Task-sheet by email. Based on your report, we've automatically marked your attendance for day $dte of $month month.<br>
+Thanks <br>
+<h4><font color='#00FF00'>Keen&Able attendance system</h4></font>"
+                    );
+                 $msg->attr("content-type" => "text/html");
+                 $msg->send;
+     #print "$from1\n";print "$month\n";print "$dte\n";
+
+#   $day="day$dte";
+#   $table="attendance_$month";
+#  print "$day->$table";
+  ##############Mark attendance###################
+#my $mark="update $table set $day=1 where email_id='$from1' ";
+#print $mark;
+#exit;
+#my  $tbl=$dbh->prepare($mark);
+#my  $updt_tbl_rv=$tbl->execute;
+    
+  
+  
+  ############# END mark attendance###############
+
+
+
+
+}
+else
+{
+
+  $msg = MIME::Lite->new(
+                 'Reply-to' => "piyush.mishra\@fosteringlinux.com",
+                  From     => "attendance\@fosteringlinux.com",
+                  To       => $from,
+                  Subject  => "Auto-reply(attendance Not marked)",
+                  Data     => "Thank you for sending your daily report  by email. Based on your report, we can't get Task-sheet,So your attendance not marked for day $dte of $month month.<br>
+
+Thanks <br>
+<h4><font color='#00FF00'>Keen&Able attendance system</h4></font>"
+                    );
+                 $msg->attr("content-type" => "text/html");
+                  $msg->send;
+
+
+
+
+}
+#print "Date----------------->$date";
+#$html_string = join("\n",@$body);
+
+#print "$html_string\n";
+#$te = HTML::TableExtract->new( headers => [qw(Id Customer Onsite Ticket Status )]);
 $te = HTML::TableExtract->new( headers => [qw(Id Customer Date Onsite Ticket Status EngineerName )]);
+
+
+#print "$te\n";
 $te->parse($html_string);
+
+
+# # Examine all matching tables
 foreach $ts ($te->tables)
                   {
                   $i=0;
         
              foreach $row ($ts->rows){
+          #     print "$row";
 ######################    Fetch <td>?????</td> value from html table######################
             my   $id= $ts->cell($i,0);  
             my   $customer= $ts->cell($i,1);
@@ -112,19 +171,20 @@ $date=~s/^\s+|\s+$//g;
 $ticket=~s/^\s+|\s+$//g;
 $status=~s/^\s+|\s+$//g;
 $engname=~s/^\s+|\s+$//g;
+#print "$id->$customer->$date->$ticket->$status->$engname\n";
 ##############################  End Regular Expression   ########################################
 
 if($id != "")
                    { 
 
-##########################   Check id exist then #update task status based on Id #################                         
-                  updatetask($id,$customer,$status);
+##########################   Check id exist then update task status based on Id #################                         
+                  update($id,$customer,$status);
   
                    }
 else
          {      
 #########################  Otherwise insert new task ############################################
-              insertion($customer,$ticket,$status,$engname,$date);
+               insertion($customer,$ticket,$status,$engname,$date);
         }  
 
 $i++;###for incriment of row of table
@@ -133,64 +193,8 @@ $i++;###for incriment of row of table
 }## Examine tables
 }### fetch td value
 ####################Update function####################### 
-sub Mark_Attendance 
-{
-my @mail_value=@_;
-my $To_mail=$mail_value[0];
-my $CurrentDate_mail=$mail_value[1];
-my $CurrentMonth_mail=$mail_value[2];
-my $Body_mail=$mail_value[3];
-my $Mail_Date=$mail_value[4];
-my $Mail_Month=$mail_value[5];
 
-  if( $CurrentDate_mail eq $Mail_Date and $CurrentMonth_mail eq $Mail_Month )
-  {
-
-if ($Body_mail =~ /<table/)
-{
-
-      $msg = MIME::Lite->new(
-                 'Reply-to' => "piyush.mishra\@fosteringlinux.com",
-                  From     => "attendance\@fosteringlinux.com",
-                  To       => $To_mail,
-                  Subject  => "Auto-reply(attendance-marked)",
-                  Data     => "Thank you for sending your daily report with Task-sheet by email. Based on your report, we've automatically marked your attendance for day $CurrentDate_mail of $CurrentMonth_mail month.<br>
-Thanks <br>
-<h4><font color='#00FF00'>Keen&Able attendance system</h4></font>"
-                    );
-                 $msg->attr("content-type" => "text/html");
-                 $msg->send;
-                 
-     
-   $day="day$CurrentDate_mail";
-   $day=~s/^\s+|\s+$//g;
-   $table="attendance_$CurrentMonth_mail";
-   $table=~s/^\s+|\s+$//g;
-  print "$table ->$day ->$From";
-    my $mark=" update $table set $day=1 where email_id='$To_mail'";
-    my  $tbl=$dbh->prepare($mark);
-    my  $updt_tbl_rv=$tbl->execute or die "Cannot connect: " . $DBI::errstr;
-   }
-else
-{
-  $msg = MIME::Lite->new(
-                 'Reply-to' => "piyush.mishra\@fosteringlinux.com",
-                  From     => "attendance\@fosteringlinux.com",
-                  To       => $To_mail,
-                  Subject  => "Auto-reply(attendance Not marked)",
-                  Data     => "Thank you for sending your daily report  by email. Based on your report, we can't get Task-sheet,So your attendance not marked for day $CurrentDate_mail of $CurrentMonth_mail month.<br>
-
-Thanks <br>
-<h4><font color='#00FF00'>Keen&Able attendance system</h4></font>"
-                    );
-                 $msg->attr("content-type" => "text/html");
-                $msg->send;
-
-
-}
-}
-}
-sub updatetask
+sub update
 { 
 @arry1=@_;
 $updt= "update $arry1[1] set status='$arry1[2]' where id='$arry1[0]' ";

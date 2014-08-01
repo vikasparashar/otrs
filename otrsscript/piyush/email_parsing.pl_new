@@ -146,7 +146,7 @@ my $Mail_Month=$mail_value[5];
   if( $CurrentDate_mail eq $Mail_Date and $CurrentMonth_mail eq $Mail_Month )
   {
 
-if ($Body_mail =~ /<table/)
+if ($Body_mail =~ /<table border=3D"1px" width=3D"90%">/)
 {
 
       $msg = MIME::Lite->new(
@@ -173,6 +173,7 @@ Thanks <br>
    }
 else
 {
+
   $msg = MIME::Lite->new(
                  'Reply-to' => "piyush.mishra\@fosteringlinux.com",
                   From     => "attendance\@fosteringlinux.com",
@@ -184,8 +185,7 @@ Thanks <br>
 <h4><font color='#00FF00'>Keen&Able attendance system</h4></font>"
                     );
                  $msg->attr("content-type" => "text/html");
-                $msg->send;
-
+                 $msg->send;
 
 }
 }
